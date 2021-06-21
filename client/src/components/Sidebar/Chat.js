@@ -26,7 +26,7 @@ class Chat extends Component {
       conversationId: conversation.id,
       otherUserId: conversation.otherUser.id,
     };
-    putMessageStatus(reqBody);
+    await this.props.putMessageStatus(reqBody);
     await this.props.setActiveChat(conversation.otherUser.username);
   };
 
@@ -54,6 +54,9 @@ const mapDispatchToProps = (dispatch) => {
   return {
     setActiveChat: (id) => {
       dispatch(setActiveChat(id));
+    },
+    putMessageStatus: (conversation) => {
+      dispatch(putMessageStatus(conversation));
     },
   };
 };

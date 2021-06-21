@@ -5,6 +5,7 @@ import {
   addConversation,
   setNewMessage,
   setSearchedUsers,
+  clearUnreadMessageCount,
 } from "../conversations";
 import { gotUser, setFetchingStatus } from "../user";
 
@@ -96,9 +97,12 @@ const sendMessage = (data, body) => {
   });
 };
 
-export const putMessageStatus = (body) => {
+export const putMessageStatus = (body) => (dispatch) => {
   try {
     saveMessageStatus(body);
+    if (body.conversationId) {
+      dispatch(clearUnreadMessageCount(body.conversationId));
+    }
   } catch (error) {
     console.error(error);
   }
