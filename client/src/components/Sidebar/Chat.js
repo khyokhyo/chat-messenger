@@ -4,6 +4,7 @@ import { BadgeAvatar, ChatContent } from "../Sidebar";
 import { withStyles } from "@material-ui/core/styles";
 import { setActiveChat } from "../../store/activeConversation";
 import { connect } from "react-redux";
+import { putMessageStatus } from "../../store/utils/thunkCreators";
 
 const styles = {
   root: {
@@ -21,6 +22,11 @@ const styles = {
 
 class Chat extends Component {
   handleClick = async (conversation) => {
+    const reqBody = {
+      conversationId: conversation.id,
+      otherUserId: conversation.otherUser.id,
+    };
+    putMessageStatus(reqBody);
     await this.props.setActiveChat(conversation.otherUser.username);
   };
 

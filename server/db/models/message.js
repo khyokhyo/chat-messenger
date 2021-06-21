@@ -1,4 +1,4 @@
-const Sequelize = require("sequelize");
+const { Sequelize, Op } = require("sequelize");
 const db = require("../db");
 
 const Message = db.define("message", {
@@ -10,6 +10,34 @@ const Message = db.define("message", {
     type: Sequelize.INTEGER,
     allowNull: false,
   },
+  status: {
+    type: Sequelize.BOOLEAN,
+    defaultValue: false,
+    allowNull: true,
+  },
 });
+
+// mark all unread messages as read given conversationId and senderId
+
+Message.markMessagesAsRead = async function (conversationId, senderId) {
+  const messages = await Message.update(
+    { status: true },
+    {
+      where: {
+        conversationId: {
+          [Op.eq]: conversationId,
+        },
+        senderId: {
+          [Op.eq]: senderId,
+        },
+        status: {
+          [Op.not]: true,
+        },
+      },
+    }
+  );
+
+  return messages;
+};
 
 module.exports = Message;

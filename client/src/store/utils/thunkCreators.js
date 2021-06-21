@@ -78,6 +78,11 @@ export const fetchConversations = () => async (dispatch) => {
   }
 };
 
+const saveMessageStatus = async (body) => {
+  const { data } = await axios.put("/api/messages", body);
+  return data;
+};
+
 const saveMessage = async (body) => {
   const { data } = await axios.post("/api/messages", body);
   return data;
@@ -89,6 +94,14 @@ const sendMessage = (data, body) => {
     recipientId: body.recipientId,
     sender: data.sender,
   });
+};
+
+export const putMessageStatus = (body) => {
+  try {
+    saveMessageStatus(body);
+  } catch (error) {
+    console.error(error);
+  }
 };
 
 // message format to send: {recipientId, text, conversationId}

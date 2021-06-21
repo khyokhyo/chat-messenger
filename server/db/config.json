@@ -1,0 +1,9 @@
+{
+  "development": {
+    "username": "khyo",
+    "password": null,
+    "database": "messenger",
+    "host": "localhost",
+    "dialect": "postgres"
+  }
+}
