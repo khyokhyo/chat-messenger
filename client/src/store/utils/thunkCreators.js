@@ -96,14 +96,21 @@ const sendMessage = (data, body) => {
 export const postMessage = (body) => (dispatch) => {
   try {
     const data = saveMessage(body);
-
-    if (!body.conversationId) {
-      dispatch(addConversation(body.recipientId, data.message));
-    } else {
-      dispatch(setNewMessage(data.message));
-    }
-
-    sendMessage(data, body);
+    data.then(
+      (responseBody) => {
+        if (responseBody && responseBody.message) {
+          if (!body.conversationId) {
+            dispatch(addConversation(body.recipientId, responseBody.message));
+          } else {
+            dispatch(setNewMessage(responseBody.message));
+          }
+          sendMessage(responseBody, body);
+        }
+      },
+      (reason) => {
+        console.error("failed with ", reason);
+      }
+    );
   } catch (error) {
     console.error(error);
   }
