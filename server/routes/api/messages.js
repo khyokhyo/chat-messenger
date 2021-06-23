@@ -9,15 +9,26 @@ router.post("/", async (req, res, next) => {
       return res.sendStatus(401);
     }
     const senderId = req.user.id;
-    const { recipientId, text, sender } = req.body;
+    const { recipientId, text, sender, conversationId } = req.body;
 
-    // find a conversation to make sure it doesn't already exist
+    // find a conversation to validate or to make sure it doesn't already exist
     let conversation = await Conversation.findConversation(
       senderId,
       recipientId
     );
 
-    if (!conversation) {
+    if (conversation) {
+      if (conversationId && conversationId !== conversation.id) {
+        return res.sendStatus(403);
+      } else {
+        const message = await Message.create({
+          senderId,
+          text,
+          conversationId,
+        });
+        return res.json({ message, sender });
+      }
+    } else {
       // create conversation
       conversation = await Conversation.create({
         user1Id: senderId,
@@ -26,13 +37,13 @@ router.post("/", async (req, res, next) => {
       if (onlineUsers.includes(sender.id)) {
         sender.online = true;
       }
+      const message = await Message.create({
+        senderId,
+        text,
+        conversationId: conversation.id,
+      });
+      res.json({ message, sender });
     }
-    const message = await Message.create({
-      senderId,
-      text,
-      conversationId: conversation.id,
-    });
-    res.json({ message, sender });
   } catch (error) {
     next(error);
   }
