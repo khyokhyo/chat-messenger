@@ -59,6 +59,8 @@ router.put("/updateReadStatus", async (req, res, next) => {
     if (conversation.id === conversationId) {
       await Message.markMessagesAsRead(conversationId, otherUserId);
       res.json({ conversationId });
+    } else {
+      return res.sendStatus(403);
     }
   } catch (error) {
     next(error);
