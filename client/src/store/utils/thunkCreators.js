@@ -79,8 +79,8 @@ export const fetchConversations = () => async (dispatch) => {
   }
 };
 
-const saveMessageStatus = async (body) => {
-  const { data } = await axios.put("/api/messages", body);
+const saveMessageReadStatus = async (body) => {
+  const { data } = await axios.put("/api/messages/updateReadStatus", body);
   return data;
 };
 
@@ -97,11 +97,11 @@ const sendMessage = (data, body) => {
   });
 };
 
-export const putMessageStatus = (body) => (dispatch) => {
+export const putMessageReadStatus = (body) => async (dispatch) => {
   try {
-    saveMessageStatus(body);
-    if (body.conversationId) {
-      dispatch(clearUnreadMessageCount(body.conversationId));
+    const data = await saveMessageReadStatus(body);
+    if (data && data.conversationId) {
+      dispatch(clearUnreadMessageCount(data.conversationId));
     }
   } catch (error) {
     console.error(error);

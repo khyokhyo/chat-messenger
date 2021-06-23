@@ -4,7 +4,7 @@ import { BadgeAvatar, ChatContent } from "../Sidebar";
 import { withStyles } from "@material-ui/core/styles";
 import { setActiveChat } from "../../store/activeConversation";
 import { connect } from "react-redux";
-import { putMessageStatus } from "../../store/utils/thunkCreators";
+import { putMessageReadStatus } from "../../store/utils/thunkCreators";
 
 const styles = {
   root: {
@@ -21,12 +21,13 @@ const styles = {
 };
 
 class Chat extends Component {
-  handleClick = async (conversation) => {
+  handleClick = async (conversation, user) => {
     const reqBody = {
       conversationId: conversation.id,
       otherUserId: conversation.otherUser.id,
+      userId: user.id,
     };
-    await this.props.putMessageStatus(reqBody);
+    await this.props.putMessageReadStatus(reqBody);
     await this.props.setActiveChat(conversation.otherUser.username);
   };
 
@@ -35,7 +36,9 @@ class Chat extends Component {
     const otherUser = this.props.conversation.otherUser;
     return (
       <Box
-        onClick={() => this.handleClick(this.props.conversation)}
+        onClick={() =>
+          this.handleClick(this.props.conversation, this.props.user)
+        }
         className={classes.root}
       >
         <BadgeAvatar
@@ -55,10 +58,19 @@ const mapDispatchToProps = (dispatch) => {
     setActiveChat: (id) => {
       dispatch(setActiveChat(id));
     },
-    putMessageStatus: (conversation) => {
-      dispatch(putMessageStatus(conversation));
+    putMessageReadStatus: (conversation) => {
+      dispatch(putMessageReadStatus(conversation));
     },
   };
 };
 
-export default connect(null, mapDispatchToProps)(withStyles(styles)(Chat));
+const mapStateToProps = (state) => {
+  return {
+    user: state.user,
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withStyles(styles)(Chat));

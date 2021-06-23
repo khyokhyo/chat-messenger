@@ -43,19 +43,23 @@ router.post("/", async (req, res, next) => {
   }
 });
 
-router.put("/", async (req, res, next) => {
+router.put("/updateReadStatus", async (req, res, next) => {
   try {
     if (!req.user) {
       return res.sendStatus(401);
     }
-    const { conversationId, otherUserId } = req.body;
+    const { conversationId, otherUserId, userId } = req.body;
 
-    const updatedMessages = await Message.markMessagesAsRead(
-      conversationId,
-      otherUserId
+    // find the conversation in database
+    const conversation = await Conversation.findConversation(
+      otherUserId,
+      userId
     );
 
-    res.json({ updatedMessages });
+    if (conversation.id === conversationId) {
+      await Message.markMessagesAsRead(conversationId, otherUserId);
+      res.json({ conversationId });
+    }
   } catch (error) {
     next(error);
   }
