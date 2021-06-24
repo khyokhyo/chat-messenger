@@ -3,15 +3,17 @@ import { Redirect, useHistory } from "react-router-dom";
 import { connect } from "react-redux";
 import {
   Grid,
-  Box,
   Typography,
   Button,
   FormControl,
   TextField,
 } from "@material-ui/core";
+import { useStyles } from "./styles.js";
 import { login } from "./store/utils/thunkCreators";
+import SideBanner from "./components/SideBanner";
 
 const Login = (props) => {
+  const classes = useStyles();
   const history = useHistory();
   const { user, login } = props;
 
@@ -28,40 +30,68 @@ const Login = (props) => {
   }
 
   return (
-    <Grid container justify="center">
-      <Box>
-        <Grid container item>
-          <Typography>Need to register?</Typography>
-          <Button onClick={() => history.push("/register")}>Register</Button>
+    <Grid container className={classes.root}>
+      <SideBanner />
+      <Grid container item xs={12} sm={6} className={classes.authContainer}>
+        <Grid container item className={classes.authHeader}>
+          <Button
+            className={classes.headerButton}
+            onClick={() => history.push("/register")}
+          >
+            Create account
+          </Button>
+          <Typography className={classes.headerText}>
+            Don't have an account?
+          </Typography>
         </Grid>
-        <form onSubmit={handleLogin}>
-          <Grid>
-            <Grid>
+
+        <Grid container item className={classes.authFormContainer}>
+          <form onSubmit={handleLogin}>
+            <Typography className={classes.formTitleText}>
+              Welcome back!
+            </Typography>
+
+            <Grid container item className={classes.authForm}>
               <FormControl margin="normal" required>
+                <Typography className={classes.formLabel}>Username</Typography>
                 <TextField
                   aria-label="username"
-                  label="Username"
                   name="username"
                   type="text"
+                  InputProps={{
+                    classes: {
+                      input: classes.formInput,
+                    },
+                  }}
+                  InputLabelProps={{ shrink: false }}
                 />
               </FormControl>
-            </Grid>
-            <FormControl margin="normal" required>
-              <TextField
-                label="password"
-                aria-label="password"
-                type="password"
-                name="password"
-              />
-            </FormControl>
-            <Grid>
-              <Button type="submit" variant="contained" size="large">
+              <FormControl margin="normal" required>
+                <Typography className={classes.formLabel}>Password</Typography>
+                <TextField
+                  aria-label="password"
+                  type="password"
+                  name="password"
+                  InputProps={{
+                    classes: {
+                      input: classes.formInput,
+                    },
+                  }}
+                  InputLabelProps={{ shrink: false }}
+                />
+              </FormControl>
+              <Button
+                className={classes.formButton}
+                type="submit"
+                variant="contained"
+                size="large"
+              >
                 Login
               </Button>
             </Grid>
-          </Grid>
-        </form>
-      </Box>
+          </form>
+        </Grid>
+      </Grid>
     </Grid>
   );
 };

@@ -10,9 +10,12 @@ import {
   TextField,
   FormHelperText,
 } from "@material-ui/core";
+import { useStyles } from "./styles.js";
 import { register } from "./store/utils/thunkCreators";
+import SideBanner from "./components/SideBanner";
 
 const Login = (props) => {
+  const classes = useStyles();
   const history = useHistory();
   const { user, register } = props;
   const [formErrorMessage, setFormErrorMessage] = useState({});
@@ -37,72 +40,116 @@ const Login = (props) => {
   }
 
   return (
-    <Grid container justify="center">
-      <Box>
-        <Grid container item>
-          <Typography>Need to log in?</Typography>
-          <Button onClick={() => history.push("/login")}>Login</Button>
+    <Grid container className={classes.root}>
+      <SideBanner />
+      <Grid container item xs={12} sm={6} className={classes.authContainer}>
+        <Grid container item className={classes.authHeader}>
+          <Button
+            className={classes.headerButton}
+            onClick={() => history.push("/login")}
+          >
+            Login
+          </Button>
+          <Typography className={classes.headerText}>
+            Already have an account?
+          </Typography>
         </Grid>
-        <form onSubmit={handleRegister}>
-          <Grid>
-            <Grid>
-              <FormControl>
+
+        <Grid container item className={classes.authFormContainer}>
+          <form onSubmit={handleRegister}>
+            <Typography className={classes.formTitleText}>
+              Create an account.
+            </Typography>
+
+            <Grid container item className={classes.authForm}>
+              <FormControl margin="normal" required>
+                <Typography className={classes.formLabel}>Username</Typography>
                 <TextField
                   aria-label="username"
-                  label="Username"
                   name="username"
                   type="text"
-                  required
+                  InputProps={{
+                    classes: {
+                      input: classes.formInput,
+                    },
+                  }}
+                  InputLabelProps={{ shrink: false }}
                 />
               </FormControl>
-            </Grid>
-            <Grid>
-              <FormControl>
+              <FormControl margin="normal" required>
+                <Typography className={classes.formLabel}>
+                  E-mail address
+                </Typography>
                 <TextField
-                  label="E-mail address"
                   aria-label="e-mail address"
                   type="email"
                   name="email"
-                  required
+                  InputProps={{
+                    classes: {
+                      input: classes.formInput,
+                    },
+                  }}
+                  InputLabelProps={{ shrink: false }}
                 />
               </FormControl>
-            </Grid>
-            <Grid>
-              <FormControl error={!!formErrorMessage.confirmPassword}>
+              <FormControl
+                margin="normal"
+                required
+                error={!!formErrorMessage.confirmPassword}
+              >
+                <Typography className={classes.formLabel}>Password</Typography>
                 <TextField
                   aria-label="password"
-                  label="Password"
                   type="password"
                   inputProps={{ minLength: 6 }}
                   name="password"
-                  required
+                  InputProps={{
+                    classes: {
+                      input: classes.formInput,
+                    },
+                  }}
+                  InputLabelProps={{ shrink: false }}
                 />
                 <FormHelperText>
                   {formErrorMessage.confirmPassword}
                 </FormHelperText>
               </FormControl>
-            </Grid>
-            <Grid>
-              <FormControl error={!!formErrorMessage.confirmPassword}>
+              <FormControl
+                margin="normal"
+                required
+                error={!!formErrorMessage.confirmPassword}
+              >
+                <Typography className={classes.formLabel}>
+                  Confirm password
+                </Typography>
                 <TextField
-                  label="Confirm Password"
                   aria-label="confirm password"
                   type="password"
                   inputProps={{ minLength: 6 }}
                   name="confirmPassword"
-                  required
+                  InputProps={{
+                    classes: {
+                      input: classes.formInput,
+                    },
+                  }}
+                  InputLabelProps={{ shrink: false }}
                 />
                 <FormHelperText>
                   {formErrorMessage.confirmPassword}
                 </FormHelperText>
               </FormControl>
+              <Button
+                className={classes.formButton}
+                type="submit"
+                variant="contained"
+                size="large"
+              >
+                Create
+              </Button>
             </Grid>
-            <Button type="submit" variant="contained" size="large">
-              Create
-            </Button>
-          </Grid>
-        </form>
-      </Box>
+          </form>
+        </Grid>
+      </Grid>
     </Grid>
   );
 };
