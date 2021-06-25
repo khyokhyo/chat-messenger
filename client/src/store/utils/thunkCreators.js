@@ -5,6 +5,7 @@ import {
   addConversation,
   setNewMessage,
   setSearchedUsers,
+  clearUnreadMessageCount,
 } from "../conversations";
 import { gotUser, setFetchingStatus } from "../user";
 
@@ -78,6 +79,11 @@ export const fetchConversations = () => async (dispatch) => {
   }
 };
 
+const saveMessageReadStatus = async (body) => {
+  const { data } = await axios.patch("/api/messages/unread-messages", body);
+  return data;
+};
+
 const saveMessage = async (body) => {
   const { data } = await axios.post("/api/messages", body);
   return data;
@@ -89,6 +95,17 @@ const sendMessage = (data, body) => {
     recipientId: body.recipientId,
     sender: data.sender,
   });
+};
+
+export const patchUnreadMessages = (body) => async (dispatch) => {
+  try {
+    const data = await saveMessageReadStatus(body);
+    if (data && data.conversationId) {
+      dispatch(clearUnreadMessageCount(data.conversationId));
+    }
+  } catch (error) {
+    console.error(error);
+  }
 };
 
 // message format to send: {recipientId, text, conversationId}

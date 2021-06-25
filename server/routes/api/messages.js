@@ -49,4 +49,28 @@ router.post("/", async (req, res, next) => {
   }
 });
 
+router.patch("/unread-messages", async (req, res, next) => {
+  try {
+    if (!req.user) {
+      return res.sendStatus(401);
+    }
+    const { conversationId, otherUserId, userId } = req.body;
+
+    // find the conversation in database
+    const conversation = await Conversation.findConversation(
+      otherUserId,
+      userId
+    );
+
+    if (conversation?.id === conversationId) {
+      await Message.markMessagesAsRead(conversationId, otherUserId);
+      res.json({ conversationId });
+    } else {
+      return res.sendStatus(403);
+    }
+  } catch (error) {
+    next(error);
+  }
+});
+
 module.exports = router;
