@@ -49,7 +49,7 @@ router.post("/", async (req, res, next) => {
   }
 });
 
-router.put("/updateReadStatus", async (req, res, next) => {
+router.patch("/unread-messages", async (req, res, next) => {
   try {
     if (!req.user) {
       return res.sendStatus(401);
@@ -62,7 +62,7 @@ router.put("/updateReadStatus", async (req, res, next) => {
       userId
     );
 
-    if (conversation.id === conversationId) {
+    if (conversation?.id === conversationId) {
       await Message.markMessagesAsRead(conversationId, otherUserId);
       res.json({ conversationId });
     } else {

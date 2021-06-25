@@ -80,7 +80,7 @@ export const fetchConversations = () => async (dispatch) => {
 };
 
 const saveMessageReadStatus = async (body) => {
-  const { data } = await axios.put("/api/messages/updateReadStatus", body);
+  const { data } = await axios.patch("/api/messages/unread-messages", body);
   return data;
 };
 
@@ -97,7 +97,7 @@ const sendMessage = (data, body) => {
   });
 };
 
-export const putMessageReadStatus = (body) => async (dispatch) => {
+export const patchUnreadMessages = (body) => async (dispatch) => {
   try {
     const data = await saveMessageReadStatus(body);
     if (data && data.conversationId) {
