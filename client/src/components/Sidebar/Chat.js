@@ -4,7 +4,10 @@ import { BadgeAvatar, ChatContent } from "../Sidebar";
 import { withStyles } from "@material-ui/core/styles";
 import { setActiveChat } from "../../store/activeConversation";
 import { connect } from "react-redux";
-import { patchUnreadMessages } from "../../store/utils/thunkCreators";
+import {
+  patchUnreadMessages,
+  readMessage,
+} from "../../store/utils/thunkCreators";
 
 const styles = {
   root: {
@@ -28,6 +31,7 @@ class Chat extends Component {
       userId: user.id,
     };
     await this.props.patchUnreadMessages(reqBody);
+    await this.props.readMessage({ conversation });
     await this.props.setActiveChat(conversation.otherUser.username);
   };
 
@@ -60,6 +64,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     patchUnreadMessages: (conversation) => {
       dispatch(patchUnreadMessages(conversation));
+    },
+    readMessage: (conversation) => {
+      dispatch(readMessage(conversation));
     },
   };
 };

@@ -42,7 +42,7 @@ const ChatContent = (props) => {
   const classes = useStyles();
 
   const { conversation } = props;
-  const { latestMessageText, otherUser, unreadMessageCount } = conversation;
+  const { latestMessage, otherUser, unreadMessageCount } = conversation;
 
   return (
     <Box className={classes.root}>
@@ -54,7 +54,7 @@ const ChatContent = (props) => {
           className={classes.previewText}
           style={unreadMessageCount ? { color: "black" } : { color: "#9CADC8" }}
         >
-          {latestMessageText}
+          {latestMessage?.text}
         </Typography>
       </Box>
       {unreadMessageCount && (
