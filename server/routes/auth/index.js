@@ -3,6 +3,7 @@ const { User } = require("../../db/models");
 const jwt = require("jsonwebtoken");
 
 const SESSION_DURATION = 86400;
+const options = { httpOnly: true, maxAge: SESSION_DURATION * 1000 };
 
 router.post("/register", async (req, res, next) => {
   try {
@@ -28,7 +29,7 @@ router.post("/register", async (req, res, next) => {
       process.env.SESSION_SECRET,
       { expiresIn: SESSION_DURATION }
     );
-    res.cookie("token", token, { httpOnly: true, maxAge: SESSION_DURATION });
+    res.cookie("token", token, options);
     res.json({
       ...user.dataValues,
     });
@@ -66,7 +67,7 @@ router.post("/login", async (req, res, next) => {
         process.env.SESSION_SECRET,
         { expiresIn: SESSION_DURATION }
       );
-      res.cookie("token", token, { httpOnly: true, maxAge: SESSION_DURATION });
+      res.cookie("token", token, options);
       res.json({
         ...user.dataValues,
       });
@@ -77,7 +78,7 @@ router.post("/login", async (req, res, next) => {
 });
 
 router.delete("/logout", (req, res, next) => {
-  res.clearCookie("token");
+  res.clearCookie("token", options);
   res.sendStatus(204);
 });
 
