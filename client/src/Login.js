@@ -11,7 +11,7 @@ import {
 } from "@material-ui/core";
 import { login } from "./store/utils/thunkCreators";
 
-export const Login = (props) => {
+const Login = (props) => {
   const history = useHistory();
   const { user, login } = props;
 
@@ -39,7 +39,6 @@ export const Login = (props) => {
             <Grid>
               <FormControl margin="normal" required>
                 <TextField
-                  data-testid="user-name"
                   aria-label="username"
                   label="Username"
                   name="username"
@@ -49,7 +48,6 @@ export const Login = (props) => {
             </Grid>
             <FormControl margin="normal" required>
               <TextField
-                data-testid="password"
                 label="password"
                 aria-label="password"
                 type="password"

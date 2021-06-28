@@ -17,7 +17,7 @@ const styles = {
   },
 };
 
-export class Input extends Component {
+class Input extends Component {
   constructor(props) {
     super(props);
     this.state = {

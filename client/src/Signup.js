@@ -12,7 +12,7 @@ import {
 } from "@material-ui/core";
 import { register } from "./store/utils/thunkCreators";
 
-export const Login = (props) => {
+const Login = (props) => {
   const history = useHistory();
   const { user, register } = props;
   const [formErrorMessage, setFormErrorMessage] = useState({});
@@ -48,7 +48,6 @@ export const Login = (props) => {
             <Grid>
               <FormControl>
                 <TextField
-                  data-testid="username"
                   aria-label="username"
                   label="Username"
                   name="username"
@@ -60,7 +59,6 @@ export const Login = (props) => {
             <Grid>
               <FormControl>
                 <TextField
-                  data-testid="email"
                   label="E-mail address"
                   aria-label="e-mail address"
                   type="email"
@@ -72,7 +70,6 @@ export const Login = (props) => {
             <Grid>
               <FormControl error={!!formErrorMessage.confirmPassword}>
                 <TextField
-                  data-testid="password"
                   aria-label="password"
                   label="Password"
                   type="password"
@@ -88,7 +85,6 @@ export const Login = (props) => {
             <Grid>
               <FormControl error={!!formErrorMessage.confirmPassword}>
                 <TextField
-                  data-testid="confirm-password"
                   label="Confirm Password"
                   aria-label="confirm password"
                   type="password"

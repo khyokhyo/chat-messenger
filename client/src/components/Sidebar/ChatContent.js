@@ -47,7 +47,7 @@ const ChatContent = (props) => {
   return (
     <Box className={classes.root}>
       <Box>
-        <Typography data-testid="username" className={classes.username}>
+        <Typography className={classes.username}>
           {otherUser.username}
         </Typography>
         <Typography
