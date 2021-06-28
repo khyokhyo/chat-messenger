@@ -2,6 +2,9 @@ const router = require("express").Router();
 const { User } = require("../../db/models");
 const jwt = require("jsonwebtoken");
 
+const SESSION_DURATION = 86400;
+const options = { httpOnly: true, maxAge: SESSION_DURATION * 1000 };
+
 router.post("/register", async (req, res, next) => {
   try {
     // expects {username, email, password} in req.body
@@ -24,11 +27,11 @@ router.post("/register", async (req, res, next) => {
     const token = jwt.sign(
       { id: user.dataValues.id },
       process.env.SESSION_SECRET,
-      { expiresIn: 86400 }
+      { expiresIn: SESSION_DURATION }
     );
+    res.cookie("token", token, options);
     res.json({
       ...user.dataValues,
-      token,
     });
   } catch (error) {
     if (error.name === "SequelizeUniqueConstraintError") {
@@ -62,11 +65,11 @@ router.post("/login", async (req, res, next) => {
       const token = jwt.sign(
         { id: user.dataValues.id },
         process.env.SESSION_SECRET,
-        { expiresIn: 86400 }
+        { expiresIn: SESSION_DURATION }
       );
+      res.cookie("token", token, options);
       res.json({
         ...user.dataValues,
-        token,
       });
     }
   } catch (error) {
@@ -75,6 +78,7 @@ router.post("/login", async (req, res, next) => {
 });
 
 router.delete("/logout", (req, res, next) => {
+  res.clearCookie("token", options);
   res.sendStatus(204);
 });
 
