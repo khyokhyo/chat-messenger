@@ -24,7 +24,7 @@ const styles = {
   },
 };
 
-class Search extends Component {
+export class Search extends Component {
   handleSubmit = (event) => {
     event.preventDefault();
   };
