@@ -3,14 +3,12 @@ import { Redirect, useHistory } from "react-router-dom";
 import { connect } from "react-redux";
 import {
   Grid,
-  Box,
   Typography,
   Button,
   FormControl,
-  TextField,
   FormHelperText,
 } from "@material-ui/core";
-import { useStyles } from "./styles.js";
+import { useStyles, CssTextField } from "./loginSignupStyles.js";
 import { register } from "./store/utils/thunkCreators";
 import SideBanner from "./components/SideBanner";
 
@@ -63,8 +61,8 @@ const Login = (props) => {
 
             <Grid container item className={classes.authForm}>
               <FormControl margin="normal" required>
-                <Typography className={classes.formLabel}>Username</Typography>
-                <TextField
+                <CssTextField
+                  label="Username"
                   aria-label="username"
                   name="username"
                   type="text"
@@ -73,14 +71,11 @@ const Login = (props) => {
                       input: classes.formInput,
                     },
                   }}
-                  InputLabelProps={{ shrink: false }}
                 />
               </FormControl>
               <FormControl margin="normal" required>
-                <Typography className={classes.formLabel}>
-                  E-mail address
-                </Typography>
-                <TextField
+                <CssTextField
+                  label="E-mail address"
                   aria-label="e-mail address"
                   type="email"
                   name="email"
@@ -89,7 +84,6 @@ const Login = (props) => {
                       input: classes.formInput,
                     },
                   }}
-                  InputLabelProps={{ shrink: false }}
                 />
               </FormControl>
               <FormControl
@@ -97,8 +91,8 @@ const Login = (props) => {
                 required
                 error={!!formErrorMessage.confirmPassword}
               >
-                <Typography className={classes.formLabel}>Password</Typography>
-                <TextField
+                <CssTextField
+                  label="Password"
                   aria-label="password"
                   type="password"
                   inputProps={{ minLength: 6 }}
@@ -108,7 +102,6 @@ const Login = (props) => {
                       input: classes.formInput,
                     },
                   }}
-                  InputLabelProps={{ shrink: false }}
                 />
                 <FormHelperText>
                   {formErrorMessage.confirmPassword}
@@ -119,10 +112,8 @@ const Login = (props) => {
                 required
                 error={!!formErrorMessage.confirmPassword}
               >
-                <Typography className={classes.formLabel}>
-                  Confirm password
-                </Typography>
-                <TextField
+                <CssTextField
+                  label="Confirm password"
                   aria-label="confirm password"
                   type="password"
                   inputProps={{ minLength: 6 }}
@@ -132,7 +123,6 @@ const Login = (props) => {
                       input: classes.formInput,
                     },
                   }}
-                  InputLabelProps={{ shrink: false }}
                 />
                 <FormHelperText>
                   {formErrorMessage.confirmPassword}

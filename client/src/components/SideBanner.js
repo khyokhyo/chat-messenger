@@ -9,8 +9,7 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: "10vh",
     maxWidth: "40vw",
     [theme.breakpoints.down("xs")]: {
-      height: "50vh",
-      maxWidth: "100vw",
+      maxWidth: "0px",
     },
     flexDirection: "column",
     justifyContent: "center",
@@ -33,18 +32,12 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down("md")]: {
       fontSize: 20,
     },
-    [theme.breakpoints.down("xs")]: {
-      fontSize: 18,
-    },
   },
   bannerIcon: {
     paddingBottom: "2vh",
     width: "85px",
     [theme.breakpoints.down("md")]: {
       width: "60px",
-    },
-    [theme.breakpoints.down("xs")]: {
-      width: "40px",
     },
   },
 }));
@@ -53,7 +46,7 @@ const SideBanner = (props) => {
   const classes = useStyles();
 
   return (
-    <Grid container item xs={12} sm={6} className={classes.sideBanner}>
+    <Grid container item xs={false} sm={6} className={classes.sideBanner}>
       <Grid item>
         <img
           src={bubbleImage}

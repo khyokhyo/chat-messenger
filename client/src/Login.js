@@ -1,14 +1,8 @@
 import React from "react";
 import { Redirect, useHistory } from "react-router-dom";
 import { connect } from "react-redux";
-import {
-  Grid,
-  Typography,
-  Button,
-  FormControl,
-  TextField,
-} from "@material-ui/core";
-import { useStyles } from "./styles.js";
+import { Grid, Typography, Button, FormControl } from "@material-ui/core";
+import { useStyles, CssTextField } from "./loginSignupStyles.js";
 import { login } from "./store/utils/thunkCreators";
 import SideBanner from "./components/SideBanner";
 
@@ -53,8 +47,8 @@ const Login = (props) => {
 
             <Grid container item className={classes.authForm}>
               <FormControl margin="normal" required>
-                <Typography className={classes.formLabel}>Username</Typography>
-                <TextField
+                <CssTextField
+                  label="Username"
                   aria-label="username"
                   name="username"
                   type="text"
@@ -63,12 +57,11 @@ const Login = (props) => {
                       input: classes.formInput,
                     },
                   }}
-                  InputLabelProps={{ shrink: false }}
                 />
               </FormControl>
               <FormControl margin="normal" required>
-                <Typography className={classes.formLabel}>Password</Typography>
-                <TextField
+                <CssTextField
+                  label="Password"
                   aria-label="password"
                   type="password"
                   name="password"
@@ -77,7 +70,6 @@ const Login = (props) => {
                       input: classes.formInput,
                     },
                   }}
-                  InputLabelProps={{ shrink: false }}
                 />
               </FormControl>
               <Button

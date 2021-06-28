@@ -1,4 +1,5 @@
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, withStyles } from "@material-ui/core/styles";
+import { TextField } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -25,10 +26,7 @@ const useStyles = makeStyles((theme) => ({
     paddingRight: "3vw",
     color: "#3A8DFF",
     boxShadow: "2px 2px 5px 1px rgba(88,133,196,0.5)",
-    fontWeight: "600",
     fontSize: 18,
-    letterSpacing: -0.2,
-    textShadow: ".2px .2px .2px",
     [theme.breakpoints.down("md")]: {
       fontSize: 12,
     },
@@ -59,6 +57,9 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "center",
     justifySelf: "center",
     width: "30vw",
+    [theme.breakpoints.down("xs")]: {
+      width: "70vw",
+    },
   },
   formTitleText: {
     fontWeight: "600",
@@ -81,10 +82,7 @@ const useStyles = makeStyles((theme) => ({
     color: "white",
     background: "#3A8DFF",
     fontFamily: "sans-serif",
-    fontWeight: "600",
     fontSize: 18,
-    letterSpacing: -0.2,
-    textShadow: ".5px .5px .5px",
     [theme.breakpoints.down("md")]: {
       fontSize: 12,
     },
@@ -93,6 +91,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   formInput: {
+    height: "5vh",
     padding: "5px",
     fontWeight: "600",
     fontSize: 20,
@@ -101,17 +100,28 @@ const useStyles = makeStyles((theme) => ({
       fontSize: 14,
     },
   },
-  formLabel: {
-    marginTop: "2vh",
-    padding: "5px",
-    color: "#B0B0B0",
-    fontWeight: "600",
-    fontSize: 18,
-    letterSpacing: -0.2,
-    [theme.breakpoints.down("md")]: {
-      fontSize: 12,
-    },
-  },
 }));
 
-export { useStyles };
+const CssTextField = withStyles((theme) => ({
+  root: {
+    "& .MuiFormLabel-root": {
+      paddingLeft: "5px",
+      color: "#B0B0B0",
+      fontSize: 18,
+      [theme.breakpoints.down("md")]: {
+        fontSize: 14,
+      },
+    },
+    "& label.Mui-focused": {
+      paddingLeft: "5px",
+      color: "#B0B0B0",
+      fontWeight: "600",
+      fontSize: 18,
+      [theme.breakpoints.down("md")]: {
+        fontSize: 14,
+      },
+    },
+  },
+}))(TextField);
+
+export { useStyles, CssTextField };
