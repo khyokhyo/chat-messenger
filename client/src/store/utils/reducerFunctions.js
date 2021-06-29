@@ -17,25 +17,24 @@ export const addMessageToStore = (state, payload) => {
       const convoCopy = { ...convo };
       convoCopy.messages.push(message);
       // if current user is the receiver of this message and current user is the sender of latest message so far,
-      // then the other user must have read the lastest message in the conversation
+      // then the other user must have read the latest message in the conversation
       if (!isSender) {
-        convoCopy.lastReadMessage =
+        const isSenderOfLatestMessage =
           convoCopy.latestMessage?.senderId ===
-          convoCopy.lastReadMessage?.senderId
-            ? convoCopy.latestMessage
-            : convoCopy.lastReadMessage;
+          convoCopy.lastReadMessage?.senderId;
+        convoCopy.lastReadMessage = isSenderOfLatestMessage
+          ? convoCopy.latestMessage
+          : convoCopy.lastReadMessage;
       }
 
       // should not update lastest message before updating the last read message
       convoCopy.latestMessage = message;
 
-      // if current user is the sender, then unread message count is cleared,
-      // otherwise the value is increased by 1 (or set to 1 if doesn't exist already)
-      convoCopy.unreadMessageCount = isSender
-        ? null
-        : convoCopy.unreadMessageCount
+      const newUnreadCount = convoCopy.unreadMessageCount
         ? convoCopy.unreadMessageCount + 1
         : 1;
+      convoCopy.unreadMessageCount = isSender ? null : newUnreadCount;
+
       return convoCopy;
     } else {
       return convo;
