@@ -19,3 +19,7 @@ yarn-debug.log*
 yarn-error.log*
 
 server/.env
+
+# Ignore test-related files
+/coverage.data
+client/coverage/
