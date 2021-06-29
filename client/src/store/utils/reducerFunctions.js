@@ -35,6 +35,16 @@ export const addMessageToStore = (state, payload) => {
         : 1;
       convoCopy.unreadMessageCount = isSender ? null : newUnreadCount;
 
+      // should not update lastest message before updating the last read message
+      convoCopy.latestMessage = message;
+
+      // if current user is the sender, then unread message count is cleared,
+      // otherwise the value is increased by 1 (or set to 1 if doesn't exist already)
+      convoCopy.unreadMessageCount = isSender
+        ? null
+        : convoCopy.unreadMessageCount
+        ? convoCopy.unreadMessageCount + 1
+        : 1;
       return convoCopy;
     } else {
       return convo;
