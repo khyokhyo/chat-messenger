@@ -6,7 +6,7 @@ import { useStyles, CssTextField } from "./loginSignupStyles.js";
 import { login } from "./store/utils/thunkCreators";
 import SideBanner from "./components/SideBanner";
 
-const Login = (props) => {
+export const Login = (props) => {
   const classes = useStyles();
   const history = useHistory();
   const { user, login } = props;
@@ -48,6 +48,7 @@ const Login = (props) => {
             <Grid container item className={classes.authForm}>
               <FormControl margin="normal" required>
                 <CssTextField
+                  data-testid="user-name"
                   label="Username"
                   aria-label="username"
                   name="username"
@@ -60,7 +61,8 @@ const Login = (props) => {
                 />
               </FormControl>
               <FormControl margin="normal" required>
-                <CssTextField
+                <CssTextField 
+                  data-testid="password"
                   label="Password"
                   aria-label="password"
                   type="password"

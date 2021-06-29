@@ -11,28 +11,28 @@ const useStyles = makeStyles(() => ({
     marginTop: 23,
     marginLeft: 6,
     display: "flex",
-    alignItems: "center"
+    alignItems: "center",
   },
   subContainer: {
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
-    flexGrow: 1
+    flexGrow: 1,
   },
   username: {
     letterSpacing: -0.23,
     fontSize: 16,
     fontWeight: "bold",
-    marginLeft: 17
+    marginLeft: 17,
   },
   ellipsis: {
     color: "#95A7C4",
     marginRight: 24,
-    opacity: 0.5
-  }
+    opacity: 0.5,
+  },
 }));
 
-const CurrentUser = (props) => {
+export const CurrentUser = (props) => {
   const classes = useStyles();
 
   const user = props.user || {};
@@ -41,7 +41,9 @@ const CurrentUser = (props) => {
     <Box className={classes.root}>
       <BadgeAvatar photoUrl={user.photoUrl} online={true} />
       <Box className={classes.subContainer}>
-        <Typography className={classes.username}>{user.username}</Typography>
+        <Typography data-testid="user-name" className={classes.username}>
+          {user.username}
+        </Typography>
         <MoreHorizIcon classes={{ root: classes.ellipsis }} />
       </Box>
     </Box>
@@ -50,7 +52,7 @@ const CurrentUser = (props) => {
 
 const mapStateToProps = (state) => {
   return {
-    user: state.user
+    user: state.user,
   };
 };
 

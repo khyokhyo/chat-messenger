@@ -22,7 +22,7 @@ router.get("/", async (req, res, next) => {
       attributes: ["id"],
       order: [[Message, "createdAt", "DESC"]],
       include: [
-        { model: Message, order: ["createdAt", "DESC"] },
+        { model: Message, order: ["createdAt", "ASC"] },
         {
           model: User,
           as: "user1",
@@ -62,14 +62,23 @@ router.get("/", async (req, res, next) => {
       }
 
       // set property for online status of the other user
-      if (onlineUsers.includes(convoJSON.otherUser.id)) {
+      if (onlineUsers[convoJSON.otherUser.id]) {
         convoJSON.otherUser.online = true;
       } else {
         convoJSON.otherUser.online = false;
       }
 
       // set properties for notification count and latest message preview
-      convoJSON.latestMessageText = convoJSON.messages[0].text;
+      convoJSON.latestMessage = convoJSON.messages[0] || null;
+
+      // set properties for unread message count
+      const unreadCount = await Message.countUnread(convoJSON.id, userId);
+      convoJSON.unreadMessageCount = unreadCount || null;
+
+      // set properties for last read message
+      const lastReadMessage = await Message.getLastRead(convoJSON.id, userId);
+      convoJSON.lastReadMessage = lastReadMessage || null;
+
       conversations[i] = convoJSON;
     }
 

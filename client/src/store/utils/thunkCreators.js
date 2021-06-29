@@ -5,15 +5,9 @@ import {
   addConversation,
   setNewMessage,
   setSearchedUsers,
+  clearUnreadMessageCount,
 } from "../conversations";
 import { gotUser, setFetchingStatus } from "../user";
-
-axios.interceptors.request.use(async function (config) {
-  const token = await localStorage.getItem("messenger-token");
-  config.headers["x-access-token"] = token;
-
-  return config;
-});
 
 // USER THUNK CREATORS
 
@@ -35,7 +29,6 @@ export const fetchUser = () => async (dispatch) => {
 export const register = (credentials) => async (dispatch) => {
   try {
     const { data } = await axios.post("/auth/register", credentials);
-    await localStorage.setItem("messenger-token", data.token);
     dispatch(gotUser(data));
     socket.emit("go-online", data.id);
   } catch (error) {
@@ -47,7 +40,6 @@ export const register = (credentials) => async (dispatch) => {
 export const login = (credentials) => async (dispatch) => {
   try {
     const { data } = await axios.post("/auth/login", credentials);
-    await localStorage.setItem("messenger-token", data.token);
     dispatch(gotUser(data));
     socket.emit("go-online", data.id);
   } catch (error) {
@@ -59,7 +51,6 @@ export const login = (credentials) => async (dispatch) => {
 export const logout = (id) => async (dispatch) => {
   try {
     await axios.delete("/auth/logout");
-    await localStorage.removeItem("messenger-token");
     dispatch(gotUser({}));
     socket.emit("logout", id);
   } catch (error) {
@@ -78,6 +69,11 @@ export const fetchConversations = () => async (dispatch) => {
   }
 };
 
+const saveMessageReadStatus = async (body) => {
+  const { data } = await axios.patch("/api/messages/unread-messages", body);
+  return data;
+};
+
 const saveMessage = async (body) => {
   const { data } = await axios.post("/api/messages", body);
   return data;
@@ -88,21 +84,43 @@ const sendMessage = (data, body) => {
     message: data.message,
     recipientId: body.recipientId,
     sender: data.sender,
+    isSender: false,
   });
+};
+
+export const readMessage = (body) => async () => {
+  const { conversation } = body;
+  if (conversation.id) {
+    if (conversation.latestMessage?.senderId === conversation.otherUser?.id) {
+      socket.emit("read-message", {
+        message: conversation.latestMessage,
+        recipientId: conversation.otherUser.id,
+      });
+    }
+  }
+};
+
+export const patchUnreadMessages = (body) => async (dispatch) => {
+  try {
+    const data = await saveMessageReadStatus(body);
+    if (data && data.conversationId) {
+      dispatch(clearUnreadMessageCount(data.conversationId));
+    }
+  } catch (error) {
+    console.error(error);
+  }
 };
 
 // message format to send: {recipientId, text, conversationId}
 // conversationId will be set to null if its a brand new conversation
-export const postMessage = (body) => (dispatch) => {
+export const postMessage = (body) => async (dispatch) => {
   try {
-    const data = saveMessage(body);
-
+    const data = await saveMessage(body);
     if (!body.conversationId) {
       dispatch(addConversation(body.recipientId, data.message));
     } else {
-      dispatch(setNewMessage(data.message));
+      dispatch(setNewMessage(data.message, null, true));
     }
-
     sendMessage(data, body);
   } catch (error) {
     console.error(error);
