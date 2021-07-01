@@ -11,6 +11,9 @@ const styles = {
   root: {
     justifySelf: "flex-end",
     marginTop: 15,
+    position: "sticky",
+    bottom: ".1px",
+    backgroundColor: "#FAFAFA",
   },
   input: {
     height: 70,
