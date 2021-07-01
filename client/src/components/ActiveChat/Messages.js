@@ -1,9 +1,17 @@
 import { React, useMemo, useRef } from "react";
 import { Box } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
 import { SenderBubble, OtherUserBubble } from "../ActiveChat";
 import moment from "moment";
 
+const useStyles = makeStyles(() => ({
+  messageEnd: {
+    marginBottom: "40px",
+  },
+}));
+
 const Messages = (props) => {
+  const classes = useStyles();
   const { messages, otherUser, userId } = props;
   const sortedMessages = useMemo(() => sortMessages(messages), [otherUser]);
 
@@ -39,7 +47,7 @@ const Messages = (props) => {
               />
             )}
             {isLastMessage && (
-              <div ref={messagesEndRef} style={{ marginBottom: "40px" }} />
+              <div ref={messagesEndRef} className={classes.messageEnd} />
             )}
           </>
         );
